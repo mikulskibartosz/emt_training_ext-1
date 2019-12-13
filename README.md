@@ -1,1 +1,1 @@
-# aws_bigdata_2019_fandom
+# Go to exercises/emr
