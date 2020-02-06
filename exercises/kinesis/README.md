@@ -1,10 +1,5 @@
 # List of exercises
 
-On the following diagram the architecture of our solution is depicted:
-
-![Kinesis sample_architecture](images/aws_kinesis_architecture.png)
-
-
 * Task 1 - Deliver Data from Kinesis to S3 (to query it in near real time)
     * Exercise I   - Create a Kinesis Stream 
     * Exercise II - Register the data within Glue Data Catalog
@@ -15,7 +10,9 @@ On the following diagram the architecture of our solution is depicted:
     * Exercise VI - Create a Kinesis Analytics application
     * Exercise VII  - Create a Cloudwach Dashboard and display the metrics
 
+On the following diagram the architecture of our solution is depicted:
 
+![Kinesis sample_architecture](images/aws_kinesis_architecture.png)
 
 ## Task 1 - Deliver Data from Kinesis to S3 (to query it in near real time) 
 

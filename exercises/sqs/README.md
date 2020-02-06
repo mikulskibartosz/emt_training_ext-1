@@ -1,5 +1,7 @@
 # List of exercises
 
+## Exercise I   - Create 2 standard SQS queues (main and dead letter)   
+
 In the following exercise we will: 
 1) Create a standard SQS queue. 
 2) In case some messages will not be processed successfully we will setup also a dead letter queue. 

@@ -2,14 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a0f7490b-8157-45d9-b4e6-fcbaea7d216e" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/emt_training_ext.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/sbt.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/exercises/emr/EMR_External_metastore/readme.md" beforeDir="false" afterPath="$PROJECT_DIR$/exercises/emr/EMR_External_metastore/readme.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/exercises/kinesis/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/exercises/kinesis/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/exercises/sqs/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/exercises/sqs/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -85,7 +80,21 @@
       <option name="project" value="LOCAL" />
       <updated>1581023219920</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="v2">
+      <created>1581023542599</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1581023542599</updated>
+    </task>
+    <task id="LOCAL-00003" summary="v2">
+      <created>1581023596639</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1581023596639</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -93,17 +102,17 @@
     <option name="LAST_COMMIT_MESSAGE" value="v2" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="382" y="7" key="CommitChangelistDialog2" timestamp="1581023541516">
+    <state x="382" y="7" key="CommitChangelistDialog2" timestamp="1581023595657">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="382" y="7" key="CommitChangelistDialog2/0.0.1536.824@0.0.1536.824" timestamp="1581023541516" />
+    <state x="382" y="7" key="CommitChangelistDialog2/0.0.1536.824@0.0.1536.824" timestamp="1581023595657" />
     <state x="549" y="168" key="FileChooserDialogImpl" timestamp="1581022930975">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="549" y="168" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1581022930975" />
-    <state x="361" y="146" key="Vcs.Push.Dialog.v2" timestamp="1581023559168">
+    <state x="361" y="146" key="Vcs.Push.Dialog.v2" timestamp="1581023597907">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="361" y="146" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1581023559168" />
+    <state x="361" y="146" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1581023597907" />
   </component>
 </project>
