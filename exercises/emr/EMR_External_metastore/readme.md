@@ -231,7 +231,7 @@ hive> show tables;
 * Is this functionality important? What kind of use cases it enables?
 
 
-### Exercise III - Crawl an S3 Datastore to register data with Glue Data Catalog
+# Exercise III - Crawl an S3 Datastore to register data with Glue Data Catalog
 
 Now we will use a sample dataset (medical helathcare providers data) stored in s3 bucket at s3://awsglue-datasets/examples/medicare/Medicare_Hospital_Provider.csv    
 We will copy this data set to a bucket within your account and run a Glue Crawler on it to register it with Glue Data Catalog
@@ -295,7 +295,7 @@ aws s3 cp s3://awsglue-datasets/examples/medicare/Medicare_Hospital_Provider.csv
 * Run some queries / play with the data set.
 
 
-### Exercise IV - Create a Glue ETL Job that will copy data from Exercise III into an RDS database
+# Exercise IV - Create a Glue ETL Job that will copy data from Exercise III into an RDS database
 
 We will need few things accomplished to copy the data we have in s3 into RDS using Glue ETL (why would we want to do this?):
 * Create a RDS database (mysql)
@@ -434,7 +434,7 @@ After setup the security group inbound rules should look like this:
 
 ![frequency28](img/rds14.PNG)
 
-### Exercise V - Crawl the RDS database to register the dataset into Glue Data Catalog 
+# Exercise V - Crawl the RDS database to register the dataset into Glue Data Catalog 
 
 Now let us register the dataset in RDS into Glue Data Catalog too.
 
