@@ -231,6 +231,229 @@ hive> show tables;
 * Is this functionality important? What kind of use cases it enables?
 
 
-   
-    
+### Exercise III - Crawl an S3 Datastore to register data with Glue Data Catalog
 
+Now we will use a sample dataset (medical helathcare providers data) stored in s3 bucket at s3://awsglue-datasets/examples/medicare/Medicare_Hospital_Provider.csv    
+We will copy this data set to a bucket within your account and run a Glue Crawler on it to register it with Glue Data Catalog
+
+Follow these steps:
+
+* Create a bucket in your AWS account (accept default settings), try to give it a meaningful name
+* Open on windows your command prompt
+* In the command below substitute **$YOUR_PROFILE** with your aws profile name and **$your_bucket** with the bucket you created previously.
+* Issue the following command to copy the dataset from original location to your bucket in S3
+
+`
+aws s3 cp s3://awsglue-datasets/examples/medicare/Medicare_Hospital_Provider.csv s3://$your_bucket/ingest/healthcare/MHP/Medicare_Hospital_Provider.csv   --profile $YOUR_PROFILE
+`
+
+* Verify in S3 Mgmt Console that the csv file got copied
+* Login to AWS Glue Console
+* Go to Crawlers and click Add Crawler
+
+![add crawler](img/add_crawler.PNG)
+
+* Name the crawler **mys3crawler** and click Next
+* For Crawler Source Type specify Data stores
+* For Data Store specify S3 and enter the path to the directory where MedicareHospitalProvider.csv is stored (s3://$your_bucket/ingest/healthcare/MHP/)
+
+![add_s3_datastore](img/add_s3_datastore.PNG)
+
+* Click Next
+* For "Add another data store" choose No and click Next
+* On the IAM role Page select "Create an IAM role", provide a name for the service role (e.g. mys3crawlerservicerole) adn click Next
+* On the Schedule Page choose "Run on demand" (Frequency) and click Next 
+
+![frequency1](img/frequency.PNG)
+
+* For Database choose "default" and for prefix "s3_". Click Next.
+
+![frequency2](img/output.PNG)
+
+* Click Finish.
+* The crawler was created. Click on "Run it now".
+
+![frequency3](img/s3crawlercreated.PNG)
+
+* Wait till the Crawler finishes. If everything went ok you should see the following message:
+
+![frequency4](img/crawlersuccess.PNG)
+
+* Go to the glue database default and check if a table named “s3_mhp” (table name  equals to prefix + directory name)
+
+![frequency5](img/s3_mhp.PNG)
+
+* Click on table name and view the metadata about it:
+
+![frequency6](img/metadata_s3_table.PNG)
+
+* Go back to table view and click Action -> View Data
+* You will be redirected to Athena Mgmt Console with 10 rows displayed (preview query) where you can run different queries against the registered table:
+
+![frequency7](img/athena_data.PNG)
+
+* Run some queries / play with the data set.
+
+
+### Exercise IV - Create a Glue ETL Job that will copy data from Exercise III into an RDS database
+
+We will need few things accomplished to copy the data we have in s3 into RDS using Glue ETL (why would we want to do this?):
+* Create a RDS database (mysql)
+* Create a Glue JDBC Connection to it
+* Create (generate based on metadata) a Glue Job to copy the S3 hospital provider dataset into mysql
+
+Please follow those steps:
+
+* Login to RDS Mgmt Console and create a mysql database like on the screenshots. 
+Make sure to select default vpc and select the database as public accessible.  
+
+![frequency8](img/mysql1.PNG)
+
+![frequency9](img/mysql2.PNG)
+
+![frequency10](img/mysql3.PNG)
+
+![frequency11](img/mysql4.PNG)
+
+* Click Create database
+* Wait till the database is created.
+* Note the endpoint and port. You will need it in the next point to connect to an rds mysql.
+
+![frequency12](img/mysqlendpoint.PNG)
+
+* To verify use a SQL tool (e.g. SQL Developer) to connect to the RDS mysql database (using the admin user)
+
+![frequency13](img/sqldeveloper.PNG)
+
+* Execute this SQL to create a schema/database called **my_tables** (if you dont ahve an sql tool with mysql connector ask the lecturer to create the schema)
+
+`
+CREATE  SCHEMA my_tables;
+`
+
+Before creating the Glue connection and Glue Job we need to modify the glue service role to allow s3 access.
+* Go to IAM Mgmt console, select Policies and find the Customer Managed Glue Service Policy 
+
+![frequency13](img/iam.PNG)
+
+* Edit it with this content
+```
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": "s3:*",
+            "Resource": "*"
+        }
+    ]
+}
+```
+
+![frequency13](img/glue_service_role.PNG)
+
+* Save it
+
+
+
+Now lets us create the Glue Connection adn Glue Job.
+
+* Login to Glue Mgmt Console and click on Connections -> Add Connection:
+* For Connection name enter **mysql_rds_connection**, set other properties like on screenshot (given that we created a mysql rds database):
+
+![frequency14](img/rds3.PNG)
+
+* Construct the JDBC string, provide the VPC (default) you created the RDS in. Also provide the right security group (**mysqlsecuritygroupname**). 
+
+![frequency15](img/rds4.PNG)
+
+* Click Next.
+* On the final page click on Finish.
+
+![frequency16](img/rds4a.PNG)
+
+
+* Select the created connection and click on Test Connection. Select the glue service role created previously. Click Test connection.
+
+![frequency17](img/rds5.PNG)
+
+* The connection will fail because inbound rules are not set correctly in the security group
+
+![frequency18](img/jdbcconnectionfailed.PNG)
+
+* To fix it go to security group **mysqlsecuritygroupname**, edit it like (inbound rule for RDS) described [here](https://docs.aws.amazon.com/glue/latest/dg/setup-vpc-for-glue-access.html).
+After setup the security group inbound rules should look like this: 
+
+![frequency19](img/sg_rules.PNG)
+ 
+* Additionally create a S3 VPC endpoint for the default VPC like described [here](https://docs.aws.amazon.com/glue/latest/dg/vpc-endpoints-s3.html) 
+* Restart the Connection Test.  
+* Wait for the test to finish. The following message should be visible (in case of an error, drop and recreate the connection again):
+
+![frequency20](img/rds6.PNG)
+
+* This connection will be used in the next Glue Job to move data from S3 to RDS.
+
+* Login to Glue Mgmt Console and click on Jobs -> Add Job
+* For 
+    * Name type s3_to_rds
+    * IAM role: select the available glue service role
+    * Glue Version: Spark 2.4, Scala 2
+    * Type: Spark
+    * This job runs: A proposed script generated by AWS Glue
+    * ETL language: Scala
+    * Script file name: s3_to_rds
+    * S3 path where the script is stored: create a directory in your S3 bucket and put the path here (s3://$BUCKET/$SCRIPT_DIRECTORY/)
+    * Temporary directory: You can use the same directory like above (s3://$BUCKET/$SCRIPT_DIRECTORY/)
+    * Catalog Options (optional) -> Use Glue Data Catalog as the hive metastore
+* Click Next
+* On the next page choose the input data set (**s3_mhp**) stored in s3 and click Next   
+*  Choose "Change Schema" and click Next
+![frequency23](img/rds9.PNG)
+* Choose “Create tables in your data target” on top of the page and 
+    * Data Store: JDBC
+    * Connection: the Connection created previously
+    * Database name: my_tables
+    * Click Next
+![frequency23](img/rds10.PNG)
+
+* On the mapping column page leave the defaults and click “Save Job and Edit Script”
+* On the Edit job page click “Run Job”
+
+![frequency25](img/rds11.PNG)
+
+* Return to the Glue console and click the Job for details
+
+![frequency26](img/rds12.PNG)
+
+* Wait and check if the job succeeded
+
+![frequency27](img/rds13.PNG)
+
+* Connect to the mysql database and check if the data is there 
+
+![frequency28](img/rds14.PNG)
+
+### Exercise V - Crawl the RDS database to register the dataset into Glue Data Catalog 
+
+Now let us register the dataset in RDS into Glue Data Catalog too.
+
+* Go to Glue Mgmt Console and select Crawlers -> Add Crawler
+* Name the crawler **rds_crawler**
+* For "Crawler source type" choose "Data stores"
+* On the Data Store page enter the following settings
+
+![frequency29](img/rds_datastore.PNG)
+
+* On the page "Add another data store" select No
+* On the "Choose an IAM role" page select the existing glue service role
+* For frequency choose "Run on demand"
+* On the Crawler Output page choose setting on the diagram
+
+![frequency30](img/rds_crawler_output.PNG)
+
+* Click on Finish and then run the Crawler. Wait till it finishes.
+
+![frequency30](img/rds_crawler_success.PNG )
+
+* Go to Glue Data Catalog default database and confirm the table was added.

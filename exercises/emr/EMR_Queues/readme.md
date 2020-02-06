@@ -24,7 +24,7 @@ spark-submit --class org.apache.spark.examples.SparkPi --master yarn --deploy-mo
   /usr/lib/spark/examples/jars/spark-examples.jar 
 `
 
-It should succeed because be default the Resource Calculator process only looks at memory, not on CPUs (although the theoretical limit of CPUs is set to 1).
+It should succeed because by default the Resource Calculator process only looks at memory, not at CPUs (although the theoretical limit of CPUs is set to 1).
 
 Its defined in the file capacity-scheduler.xml:
 

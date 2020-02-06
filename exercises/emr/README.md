@@ -21,6 +21,10 @@
 ### Exercise VI  - Compare the size and objects created in s3 for different tables. 10 min 
 ### Exercise VII - Enabling vectorization on ORC tables 15 min
 
+# Module Spark
+### Exercise I   - Calculate resources available in EMR (m5.xlarge, 8 worker nodes) for Spark processing (Part 1 - 15 min, Part 2 - 20 min) 
+### Exercise II  - Calculate resources available in EMR (r5.8xlarge, 12 worker nodes) for Spark processing (20 min) 
+
 ## Module EMR queues
 
 ### Exercise I   - Disable the default queue 10 min
@@ -31,6 +35,8 @@
 
 ### Exercise I  - Create a EMR Cluster with Glue Data Catalog as external hive metastore  25 min
 ### Exercise II - Create new tables from Athena that will be available also in EMR CLuster (with Glue Data Catalog as external hive metastore) 20 min 
-
+### Exercise III - Crawl an S3 Datastore to register data with Glue Data Catalog 15 min
+### Exercise IV - Create a Glue ETL Job that will copy data from Exercise III into an RDS database 20 min
+### Exercise V - Crawl the RDS database to register the dataset into Glue Data Catalog 15 min
 
  

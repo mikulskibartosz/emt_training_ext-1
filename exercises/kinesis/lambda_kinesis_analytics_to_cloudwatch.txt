@@ -1,0 +1,51 @@
+import json
+import boto3
+import random
+import base64
+from datetime import datetime
+
+
+    
+def lambda_handler(event, context):
+    cloudwatch = boto3.client('cloudwatch')
+    output = []
+    success = 0
+    failure = 0
+    for record in event['records']:
+        try:
+            payload = base64.b64decode(record['data'])
+            parsed_message = json.loads(payload)
+            response = cloudwatch.put_metric_data(
+                Namespace = 'Emergency_events',
+                MetricData = [
+                    {
+                        'MetricName': 'Number of Events',
+                        'Dimensions': [
+                            {
+                                'Name': 'CITY',
+                                'Value': parsed_message['CITY']
+                            },
+                            {
+                                'Name': 'DISTRICT',
+                                'Value': parsed_message['DISTRICT']
+                            },
+                            {
+                                'Name': 'EVENTNAME',
+                                'Value': parsed_message['EVENTNAME']
+                            },
+                        ],
+                  'Value': parsed_message['NR_OF_EVENTS'],
+                  'Unit': 'None',
+                  'StorageResolution': 1
+                    },
+                ]
+            )
+            success += 1
+            output.append({'recordId': record['recordId'], 'result': 'Ok'})
+        except Exception as e:
+            print('Exception = {0}'.format(e))
+            failure += 1
+            output.append({'recordId': record['recordId'], 'result': 'DeliveryFailed'})
+
+    print('Successfully delivered {0} records, failed to deliver {1} records'.format(success, failure))
+    return {'records': output}
